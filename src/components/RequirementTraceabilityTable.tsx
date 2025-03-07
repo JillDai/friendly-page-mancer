@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FileText, FileCode, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -29,19 +28,16 @@ interface TraceabilityItem {
     title: string;
     severity: 'Medium' | 'High' | 'Low';
   }>;
-  release?: string;
 }
 
 interface RequirementTraceabilityTableProps {
   filteredRequirements?: string[];
   filteredTestCases?: string[];
-  filteredReleases?: string[];
 }
 
 const traceabilityData: TraceabilityItem[] = [
   {
     id: '1',
-    release: 'release01',
     requirement: {
       id: 'TCTF-607',
       status: 'TO DO',
@@ -101,7 +97,6 @@ const traceabilityData: TraceabilityItem[] = [
   },
   {
     id: '2',
-    release: 'release02',
     requirement: {
       id: 'TCTF-159',
       status: 'TO DO',
@@ -136,7 +131,6 @@ const traceabilityData: TraceabilityItem[] = [
   },
   {
     id: '3',
-    release: 'release03',
     requirement: {
       id: 'TCTF-158',
       status: 'TO DO',
@@ -174,12 +168,11 @@ const traceabilityData: TraceabilityItem[] = [
 
 const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> = ({ 
   filteredRequirements = [], 
-  filteredTestCases = [],
-  filteredReleases = []
+  filteredTestCases = [] 
 }) => {
   
   const filteredData = traceabilityData.filter(item => {
-    if (filteredRequirements.length === 0 && filteredTestCases.length === 0 && filteredReleases.length === 0) {
+    if (filteredRequirements.length === 0 && filteredTestCases.length === 0) {
       return true;
     }
     
@@ -188,11 +181,8 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
     
     const hasMatchingTestCase = filteredTestCases.length === 0 || 
       item.testCases.some(tc => filteredTestCases.includes(tc.id));
-      
-    const matchesRelease = filteredReleases.length === 0 || 
-      (item.release && filteredReleases.includes(item.release));
     
-    return matchesRequirement && hasMatchingTestCase && matchesRelease;
+    return matchesRequirement && hasMatchingTestCase;
   });
 
   if (filteredData.length === 0) {
@@ -203,111 +193,162 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
     );
   }
 
-  // Calculate summary data
-  const totalRequirements = filteredData.length;
-  const coveredRequirements = filteredData.filter(item => 
-    item.testCaseTemplates.length > 0
-  ).length;
-  
-  const coveragePercentage = totalRequirements > 0 
-    ? Math.round((coveredRequirements / totalRequirements) * 100) 
-    : 0;
-
   return (
-    <div>
-      {/* Summary Section */}
-      <div className="p-6 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Summary</h2>
-        <div className="flex mb-6">
-          <div className="mr-16">
-            <div className="text-4xl font-bold text-gray-800">{totalRequirements}</div>
-            <div className="text-sm text-gray-600">Requirements</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-green-600">{coveredRequirements}</div>
-            <div className="text-sm text-gray-600">Covered</div>
-          </div>
-        </div>
-        
-        <div className="mb-2">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-700">Coverage level - {coveragePercentage}% covered</span>
-            <span className="text-xs text-gray-500">{coveragePercentage}%</span>
-          </div>
-          <div className="w-full bg-gray-200 h-2 rounded-full mt-1">
-            <div 
-              className="bg-green-600 h-2 rounded-full" 
-              style={{ width: `${coveragePercentage}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead className="bg-[#357874] text-white">
+          <tr>
+            <th className="py-3 px-4 text-left font-medium w-1/5">Requirements</th>
+            <th className="py-3 px-4 text-left font-medium w-1/5">Test Case Templates</th>
+            <th className="py-3 px-4 text-left font-medium w-1/5">Test Cases</th>
+            <th className="py-3 px-4 text-left font-medium w-1/5">Executions</th>
+            <th className="py-3 px-4 text-left font-medium w-1/5">Defects</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.map((item, index) => (
+            <React.Fragment key={item.id}>
+              <tr className="border-b border-gray-200">
+                <td className="py-3 px-4 align-top" rowSpan={Math.max(
+                  item.testCaseTemplates.length,
+                  item.testCases.length,
+                  item.executions.length,
+                  item.defects.length,
+                  1
+                )}>
+                  <div className="flex gap-2 items-start">
+                    <div className="min-w-6 mt-0.5">
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-emerald-500 text-white">
+                        <FileText size={14} />
+                      </span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-custom-teal">{item.requirement.id}</div>
+                      <div className="flex gap-2 items-center mt-1">
+                        <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-gray-200 text-gray-700">
+                          {item.requirement.status}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm">{item.requirement.title}</div>
+                    </div>
+                  </div>
+                </td>
 
-      {/* Traceability Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead className="bg-[#357874] text-white">
-            <tr>
-              <th className="py-3 px-4 text-left font-medium w-1/5">Requirements</th>
-              <th className="py-3 px-4 text-left font-medium w-1/5">Test Case Templates</th>
-              <th className="py-3 px-4 text-left font-medium w-1/5">Test Cases</th>
-              <th className="py-3 px-4 text-left font-medium w-1/5">Executions</th>
-              <th className="py-3 px-4 text-left font-medium w-1/5">Defects</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item, index) => (
-              <React.Fragment key={item.id}>
-                <tr className="border-b border-gray-200">
-                  <td className="py-3 px-4 align-top" rowSpan={Math.max(
-                    item.testCaseTemplates.length,
-                    item.testCases.length,
-                    item.executions.length,
-                    item.defects.length,
-                    1
-                  )}>
+                {item.testCaseTemplates.length > 0 ? (
+                  <td className="py-3 px-4 align-top">
                     <div className="flex gap-2 items-start">
                       <div className="min-w-6 mt-0.5">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-emerald-500 text-white">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-blue-500 text-white">
+                          <FileCode size={14} />
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-custom-teal">{item.testCaseTemplates[0].id}</div>
+                        <div className="flex gap-2 items-center mt-1">
+                          <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-blue-600 text-white">
+                            {item.testCaseTemplates[0].status}
+                          </span>
+                        </div>
+                        <div className="mt-2 text-sm">{item.testCaseTemplates[0].title}</div>
+                      </div>
+                    </div>
+                  </td>
+                ) : (
+                  <td className="py-3 px-4"></td>
+                )}
+
+                {item.testCases.length > 0 ? (
+                  <td className="py-3 px-4 align-top">
+                    <div className="flex gap-2 items-start">
+                      <div className="min-w-6 mt-0.5">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-cyan-500 text-white">
                           <FileText size={14} />
                         </span>
                       </div>
                       <div>
-                        <div className="font-semibold text-custom-teal">{item.requirement.id}</div>
+                        <div className="font-semibold text-custom-teal">{item.testCases[0].id}</div>
+                      </div>
+                    </div>
+                  </td>
+                ) : (
+                  <td className="py-3 px-4"></td>
+                )}
+
+                {item.executions.length > 0 ? (
+                  <td className="py-3 px-4 align-top">
+                    <div>
+                      <div className="mb-1">Execution: {item.executions[0].id}</div>
+                      <div className="text-sm text-gray-600">{item.executions[0].plan}</div>
+                      <div className="mt-2">
+                        <span className={cn(
+                          "px-4 py-1 text-xs rounded-full font-medium text-white",
+                          item.executions[0].status === 'Fail' && "bg-red-500",
+                          item.executions[0].status === 'Open' && "bg-gray-400",
+                          item.executions[0].status === 'Pass' && "bg-green-500"
+                        )}>
+                          {item.executions[0].status}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                ) : (
+                  <td className="py-3 px-4"></td>
+                )}
+
+                {item.defects.length > 0 ? (
+                  <td className="py-3 px-4 align-top">
+                    <div className="flex gap-2 items-start">
+                      <div className="min-w-6 mt-0.5">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-red-500 text-white">
+                          <AlertCircle size={14} />
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-custom-teal">{item.defects[0].id}</div>
                         <div className="flex gap-2 items-center mt-1">
-                          <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-gray-200 text-gray-700">
-                            {item.requirement.status}
+                          <span className={cn(
+                            "px-2 py-0.5 text-xs rounded-full font-medium text-white",
+                            item.defects[0].status === 'CLOSED' && "bg-green-600",
+                            item.defects[0].status === 'OPEN' && "bg-red-500"
+                          )}>
+                            {item.defects[0].status}
                           </span>
                         </div>
-                        <div className="mt-2 text-sm">{item.requirement.title}</div>
+                        <div className="mt-2 text-sm">{item.defects[0].title}</div>
+                        <div className="mt-1 flex items-center">
+                          <span className="h-2 w-2 bg-yellow-500 mr-1.5"></span>
+                          <span className="text-sm text-gray-600">{item.defects[0].severity}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                ) : (
+                  <td className="py-3 px-4"></td>
+                )}
+              </tr>
+
+              {item.testCaseTemplates.slice(1).map((template, tIndex) => (
+                <tr key={`template-${tIndex}`} className="border-b border-gray-200">
+                  <td className="py-3 px-4 align-top">
+                    <div className="flex gap-2 items-start">
+                      <div className="min-w-6 mt-0.5">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-blue-500 text-white">
+                          <FileCode size={14} />
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-custom-teal">{template.id}</div>
+                        <div className="flex gap-2 items-center mt-1">
+                          <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-blue-600 text-white">
+                            {template.status}
+                          </span>
+                        </div>
+                        <div className="mt-2 text-sm">{template.title}</div>
                       </div>
                     </div>
                   </td>
 
-                  {item.testCaseTemplates.length > 0 ? (
-                    <td className="py-3 px-4 align-top">
-                      <div className="flex gap-2 items-start">
-                        <div className="min-w-6 mt-0.5">
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-blue-500 text-white">
-                            <FileCode size={14} />
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-custom-teal">{item.testCaseTemplates[0].id}</div>
-                          <div className="flex gap-2 items-center mt-1">
-                            <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-blue-600 text-white">
-                              {item.testCaseTemplates[0].status}
-                            </span>
-                          </div>
-                          <div className="mt-2 text-sm">{item.testCaseTemplates[0].title}</div>
-                        </div>
-                      </div>
-                    </td>
-                  ) : (
-                    <td className="py-3 px-4"></td>
-                  )}
-
-                  {item.testCases.length > 0 ? (
+                  {item.testCases[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div className="flex gap-2 items-start">
                         <div className="min-w-6 mt-0.5">
@@ -316,7 +357,7 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                           </span>
                         </div>
                         <div>
-                          <div className="font-semibold text-custom-teal">{item.testCases[0].id}</div>
+                          <div className="font-semibold text-custom-teal">{item.testCases[tIndex + 1].id}</div>
                         </div>
                       </div>
                     </td>
@@ -324,19 +365,19 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                     <td className="py-3 px-4"></td>
                   )}
 
-                  {item.executions.length > 0 ? (
+                  {item.executions[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div>
-                        <div className="mb-1">Execution: {item.executions[0].id}</div>
-                        <div className="text-sm text-gray-600">{item.executions[0].plan}</div>
+                        <div className="mb-1">Execution: {item.executions[tIndex + 1].id}</div>
+                        <div className="text-sm text-gray-600">{item.executions[tIndex + 1].plan}</div>
                         <div className="mt-2">
                           <span className={cn(
                             "px-4 py-1 text-xs rounded-full font-medium text-white",
-                            item.executions[0].status === 'Fail' && "bg-red-500",
-                            item.executions[0].status === 'Open' && "bg-gray-400",
-                            item.executions[0].status === 'Pass' && "bg-green-500"
+                            item.executions[tIndex + 1].status === 'Fail' && "bg-red-500",
+                            item.executions[tIndex + 1].status === 'Open' && "bg-gray-400",
+                            item.executions[tIndex + 1].status === 'Pass' && "bg-green-500"
                           )}>
-                            {item.executions[0].status}
+                            {item.executions[tIndex + 1].status}
                           </span>
                         </div>
                       </div>
@@ -345,7 +386,7 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                     <td className="py-3 px-4"></td>
                   )}
 
-                  {item.defects.length > 0 ? (
+                  {item.defects[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div className="flex gap-2 items-start">
                         <div className="min-w-6 mt-0.5">
@@ -354,20 +395,20 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                           </span>
                         </div>
                         <div>
-                          <div className="font-semibold text-custom-teal">{item.defects[0].id}</div>
+                          <div className="font-semibold text-custom-teal">{item.defects[tIndex + 1].id}</div>
                           <div className="flex gap-2 items-center mt-1">
                             <span className={cn(
                               "px-2 py-0.5 text-xs rounded-full font-medium text-white",
-                              item.defects[0].status === 'CLOSED' && "bg-green-600",
-                              item.defects[0].status === 'OPEN' && "bg-red-500"
+                              item.defects[tIndex + 1].status === 'CLOSED' && "bg-green-600",
+                              item.defects[tIndex + 1].status === 'OPEN' && "bg-red-500"
                             )}>
-                              {item.defects[0].status}
+                              {item.defects[tIndex + 1].status}
                             </span>
                           </div>
-                          <div className="mt-2 text-sm">{item.defects[0].title}</div>
+                          <div className="mt-2 text-sm">{item.defects[tIndex + 1].title}</div>
                           <div className="mt-1 flex items-center">
                             <span className="h-2 w-2 bg-yellow-500 mr-1.5"></span>
-                            <span className="text-sm text-gray-600">{item.defects[0].severity}</span>
+                            <span className="text-sm text-gray-600">{item.defects[tIndex + 1].severity}</span>
                           </div>
                         </div>
                       </div>
@@ -376,103 +417,11 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                     <td className="py-3 px-4"></td>
                   )}
                 </tr>
-
-                {item.testCaseTemplates.slice(1).map((template, tIndex) => (
-                  <tr key={`template-${tIndex}`} className="border-b border-gray-200">
-                    <td className="py-3 px-4 align-top">
-                      <div className="flex gap-2 items-start">
-                        <div className="min-w-6 mt-0.5">
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-blue-500 text-white">
-                            <FileCode size={14} />
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-custom-teal">{template.id}</div>
-                          <div className="flex gap-2 items-center mt-1">
-                            <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-blue-600 text-white">
-                              {template.status}
-                            </span>
-                          </div>
-                          <div className="mt-2 text-sm">{template.title}</div>
-                        </div>
-                      </div>
-                    </td>
-
-                    {item.testCases[tIndex + 1] ? (
-                      <td className="py-3 px-4 align-top">
-                        <div className="flex gap-2 items-start">
-                          <div className="min-w-6 mt-0.5">
-                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-cyan-500 text-white">
-                              <FileText size={14} />
-                            </span>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-custom-teal">{item.testCases[tIndex + 1].id}</div>
-                          </div>
-                        </div>
-                      </td>
-                    ) : (
-                      <td className="py-3 px-4"></td>
-                    )}
-
-                    {item.executions[tIndex + 1] ? (
-                      <td className="py-3 px-4 align-top">
-                        <div>
-                          <div className="mb-1">Execution: {item.executions[tIndex + 1].id}</div>
-                          <div className="text-sm text-gray-600">{item.executions[tIndex + 1].plan}</div>
-                          <div className="mt-2">
-                            <span className={cn(
-                              "px-4 py-1 text-xs rounded-full font-medium text-white",
-                              item.executions[tIndex + 1].status === 'Fail' && "bg-red-500",
-                              item.executions[tIndex + 1].status === 'Open' && "bg-gray-400",
-                              item.executions[tIndex + 1].status === 'Pass' && "bg-green-500"
-                            )}>
-                              {item.executions[tIndex + 1].status}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                    ) : (
-                      <td className="py-3 px-4"></td>
-                    )}
-
-                    {item.defects[tIndex + 1] ? (
-                      <td className="py-3 px-4 align-top">
-                        <div className="flex gap-2 items-start">
-                          <div className="min-w-6 mt-0.5">
-                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-red-500 text-white">
-                              <AlertCircle size={14} />
-                            </span>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-custom-teal">{item.defects[tIndex + 1].id}</div>
-                            <div className="flex gap-2 items-center mt-1">
-                              <span className={cn(
-                                "px-2 py-0.5 text-xs rounded-full font-medium text-white",
-                                item.defects[tIndex + 1].status === 'CLOSED' && "bg-green-600",
-                                item.defects[tIndex + 1].status === 'OPEN' && "bg-red-500"
-                              )}>
-                                {item.defects[tIndex + 1].status}
-                              </span>
-                            </div>
-                            <div className="mt-2 text-sm">{item.defects[tIndex + 1].title}</div>
-                            <div className="mt-1 flex items-center">
-                              <span className="h-2 w-2 bg-yellow-500 mr-1.5"></span>
-                              <span className="text-sm text-gray-600">{item.defects[tIndex + 1].severity}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    ) : (
-                      <td className="py-3 px-4"></td>
-                    )}
-                  </tr>
-                ))}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
