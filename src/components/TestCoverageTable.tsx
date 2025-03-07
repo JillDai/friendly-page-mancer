@@ -136,7 +136,7 @@ const TestCoverageTable: React.FC<TestCoverageTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <div className="mb-8">
+      <div className="mb-8 p-6 bg-white rounded-md shadow-sm border border-gray-100">
         <h3 className="text-lg font-semibold text-custom-dark-teal mb-4">Summary</h3>
         
         <div className="flex gap-12 mb-6">
