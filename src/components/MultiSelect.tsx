@@ -67,7 +67,7 @@ export function MultiSelect({
           aria-expanded={open}
           className={cn(
             "w-full justify-between border-2 border-gray-300 hover:bg-transparent",
-            selected.length > 0 ? "text-black" : "text-gray-500",
+            selected.length > 0 ? "text-custom-dark-teal" : "text-gray-500",
             className
           )}
         >
@@ -97,11 +97,11 @@ export function MultiSelect({
           <CommandEmpty>No results found.</CommandEmpty>
           <div className="border-b px-2 py-1.5">
             <div
-              className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 rounded p-1"
+              className="flex items-center gap-2 cursor-pointer hover:bg-custom-pale/50 rounded p-1"
               onClick={handleSelectAll}
             >
               {selectAll ? (
-                <CheckSquare className="h-4 w-4" />
+                <CheckSquare className="h-4 w-4 text-custom-teal" />
               ) : (
                 <Square className="h-4 w-4" />
               )}
@@ -116,16 +116,17 @@ export function MultiSelect({
                   key={option.value}
                   value={option.value}
                   onSelect={() => handleSelect(option.value)}
+                  className="hover:bg-custom-pale/50"
                 >
                   <div className="flex items-center gap-2 mr-2">
                     {isSelected ? (
-                      <CheckSquare className="h-4 w-4" />
+                      <CheckSquare className="h-4 w-4 text-custom-teal" />
                     ) : (
                       <Square className="h-4 w-4" />
                     )}
                   </div>
                   {option.label}
-                  {isSelected && <Check className="ml-auto h-4 w-4" />}
+                  {isSelected && <Check className="ml-auto h-4 w-4 text-custom-teal" />}
                 </CommandItem>
               );
             })}
