@@ -60,6 +60,7 @@ const OverviewPage = () => {
   
   const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
   const [selectedTestCases, setSelectedTestCases] = useState<string[]>([]);
+  const [selectedReleaseForTraceability, setSelectedReleaseForTraceability] = useState<string[]>([]);
   
   const [appliedFilters, setAppliedFilters] = useState<{
     releases: string[];
@@ -67,12 +68,14 @@ const OverviewPage = () => {
     assignees: string[];
     requirements: string[];
     testCases: string[];
+    releasesForTraceability: string[];
   }>({
     releases: [],
     cycles: [],
     assignees: [],
     requirements: [],
-    testCases: []
+    testCases: [],
+    releasesForTraceability: []
   });
   
   const handleSearch = () => {
@@ -92,13 +95,15 @@ const OverviewPage = () => {
     } else if (activeTab === "requirement-traceability") {
       console.log('Searching with Requirement Traceability filters:', {
         requirements: selectedRequirements,
-        testCases: selectedTestCases
+        testCases: selectedTestCases,
+        releasesForTraceability: selectedReleaseForTraceability
       });
       
       setAppliedFilters({
         ...appliedFilters,
         requirements: [...selectedRequirements],
-        testCases: [...selectedTestCases]
+        testCases: [...selectedTestCases],
+        releasesForTraceability: [...selectedReleaseForTraceability]
       });
     }
   };
@@ -202,7 +207,18 @@ const OverviewPage = () => {
               </div>
             </div>
           ) : activeTab === "requirement-traceability" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Release</label>
+                <MultiSelect 
+                  options={releaseOptions}
+                  selected={selectedReleaseForTraceability}
+                  onChange={setSelectedReleaseForTraceability}
+                  placeholder="Select releases"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
+              
               <div>
                 <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Requirement</label>
                 <MultiSelect 
@@ -256,6 +272,7 @@ const OverviewPage = () => {
               <RequirementTraceabilityTable 
                 filteredRequirements={appliedFilters.requirements}
                 filteredTestCases={appliedFilters.testCases}
+                filteredReleases={appliedFilters.releasesForTraceability}
               />
             </CardContent>
           </Card>
