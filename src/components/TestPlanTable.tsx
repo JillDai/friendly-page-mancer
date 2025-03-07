@@ -34,26 +34,35 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '1-1',
-        name: 'Cycle 01-01',
+        name: 'Cycle 01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_01', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_02', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_03', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_04', progress: 57, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_05', progress: 68, caseCount: 7, assignedTo: 'Assigned to' }
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_01', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_02', progress: 46, caseCount: 5, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_03', progress: 36, caseCount: 6, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_04', progress: 57, caseCount: 3, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_05', progress: 68, caseCount: 7, assignedTo: 'Emma Wilson' }
         ]
       },
       {
         id: '1-2',
-        name: 'Cycle 01-02',
+        name: 'Cycle 02',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_06', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_07', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_08', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_09', progress: 57, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_10', progress: 68, caseCount: 7, assignedTo: 'Assigned to' }
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_06', progress: 26, caseCount: 3, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_07', progress: 46, caseCount: 5, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_08', progress: 36, caseCount: 6, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_09', progress: 57, caseCount: 3, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_10', progress: 68, caseCount: 7, assignedTo: 'John Doe' }
+        ]
+      },
+      {
+        id: '1-3',
+        name: 'Cycle 03',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_11', progress: 26, caseCount: 3, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_12', progress: 46, caseCount: 5, assignedTo: 'Michael Chen' }
         ]
       }
     ]
@@ -65,25 +74,25 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '2-1',
-        name: 'Cycle 02-01',
+        name: 'Cycle 01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_11', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_12', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_13', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_14', progress: 57, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_15', progress: 68, caseCount: 7, assignedTo: 'Assigned to' }
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_13', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_14', progress: 46, caseCount: 5, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_15', progress: 36, caseCount: 6, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_16', progress: 57, caseCount: 3, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_17', progress: 68, caseCount: 7, assignedTo: 'Emma Wilson' }
         ]
       },
       {
         id: '2-2',
-        name: 'Cycle 02-02',
+        name: 'Cycle 02',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_16', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_17', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_18', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_19', progress: 57, caseCount: 3, assignedTo: 'Assigned to' }
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_18', progress: 26, caseCount: 3, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_19', progress: 46, caseCount: 5, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_20', progress: 36, caseCount: 6, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_21', progress: 57, caseCount: 3, assignedTo: 'Michael Chen' }
         ]
       }
     ]
@@ -95,11 +104,29 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '3-1',
-        name: 'Cycle 03-01',
+        name: 'Cycle 01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_20', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_21', progress: 46, caseCount: 5, assignedTo: 'Assigned to' }
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_22', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_23', progress: 46, caseCount: 5, assignedTo: 'Emma Wilson' }
+        ]
+      },
+      {
+        id: '3-2',
+        name: 'Cycle 02',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_24', progress: 36, caseCount: 4, assignedTo: 'Michael Chen' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_25', progress: 52, caseCount: 6, assignedTo: 'John Doe' }
+        ]
+      },
+      {
+        id: '3-3',
+        name: 'Cycle 03',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_26', progress: 41, caseCount: 5, assignedTo: 'Emma Wilson' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_27', progress: 63, caseCount: 7, assignedTo: 'Michael Chen' }
         ]
       }
     ]
@@ -108,21 +135,73 @@ const testData: ReleaseData[] = [
 
 interface TestPlanTableProps {
   filteredReleases?: string[];
+  filteredCycles?: string[];
+  filteredAssignees?: string[];
 }
 
-const TestPlanTable: React.FC<TestPlanTableProps> = ({ filteredReleases }) => {
-  // Filter the data based on selected releases
+const TestPlanTable: React.FC<TestPlanTableProps> = ({ 
+  filteredReleases = [],
+  filteredCycles = [],
+  filteredAssignees = []
+}) => {
+  // Filter the data based on selected filters
   const filterData = () => {
-    if (!filteredReleases || filteredReleases.length === 0) {
-      return testData;
+    let filtered = [...testData];
+    
+    // Filter by release
+    if (filteredReleases.length > 0) {
+      filtered = filtered.filter(release => 
+        filteredReleases.some(selectedRelease => 
+          selectedRelease.toLowerCase() === `release${release.id.padStart(2, '0')}` || 
+          selectedRelease.toLowerCase() === `release${release.id}`
+        )
+      );
     }
     
-    return testData.filter(release => 
-      filteredReleases.some(selectedRelease => 
-        selectedRelease.toLowerCase() === `release${release.id.padStart(2, '0')}` || 
-        selectedRelease.toLowerCase() === `release${release.id}`
-      )
-    );
+    // If we have cycle filters, filter the cycles within each release
+    if (filteredCycles.length > 0) {
+      filtered = filtered.map(release => {
+        return {
+          ...release,
+          cycles: release.cycles.filter(cycle => {
+            // Extract the cycle number from the cycle name (Cycle XX)
+            const cycleNumber = cycle.name.replace('Cycle ', '').padStart(2, '0');
+            return filteredCycles.some(selectedCycle => 
+              selectedCycle.toLowerCase().includes(cycleNumber.toLowerCase()) ||
+              selectedCycle.toLowerCase().includes(cycle.id.split('-')[1])
+            );
+          })
+        };
+      }).filter(release => release.cycles.length > 0); // Remove releases with no matching cycles
+    }
+    
+    // If we have assignee filters, filter the plans within each cycle
+    if (filteredAssignees.length > 0) {
+      filtered = filtered.map(release => {
+        return {
+          ...release,
+          cycles: release.cycles.map(cycle => {
+            return {
+              ...cycle,
+              plans: cycle.plans.filter(plan => {
+                const assigneeName = plan.assignedTo;
+                return filteredAssignees.some(selectedAssignee => {
+                  // Convert the selectedAssignee (value) to a name for comparison
+                  let assigneeForComparison = selectedAssignee;
+                  if (selectedAssignee === 'john_doe') assigneeForComparison = 'John Doe';
+                  if (selectedAssignee === 'emma_wilson') assigneeForComparison = 'Emma Wilson';
+                  if (selectedAssignee === 'michael_chen') assigneeForComparison = 'Michael Chen';
+                  
+                  return assigneeName.toLowerCase().includes(assigneeForComparison.toLowerCase());
+                });
+              })
+            };
+          }).filter(cycle => cycle.plans.length > 0) // Remove cycles with no matching plans
+        };
+      }).filter(release => release.cycles.length > 0); // Remove releases with no matching cycles
+    }
+    
+    return filtered;
   };
 
   const filteredData = filterData();
@@ -130,7 +209,7 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({ filteredReleases }) => {
   return (
     <div className="rounded-md overflow-hidden shadow-sm">
       <table className="w-full border-collapse">
-        <thead className="bg-custom-teal text-white">
+        <thead className="bg-[#357874] text-white">
           <tr>
             <th className="py-3 px-4 text-left font-medium">Release</th>
             <th className="py-3 px-4 text-left font-medium">Cycle</th>
@@ -172,7 +251,7 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({ filteredReleases }) => {
                   ) : null}
                   
                   <td className="py-3 px-4">
-                    <div className="text-custom-teal font-medium">{plan.id}</div>
+                    <div className="text-[#357874] font-medium">{plan.id}</div>
                     <div className="flex items-center gap-2 mt-1">
                       <span className={cn(
                         "px-2 py-0.5 text-xs rounded-full font-medium",

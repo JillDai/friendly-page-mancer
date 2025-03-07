@@ -16,7 +16,7 @@ import { MultiSelect } from '@/components/MultiSelect';
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
   
-  // Filter options data
+  // Filter options data - updated with specified options
   const releaseOptions = [
     { value: 'release01', label: 'Release 01' },
     { value: 'release02', label: 'Release 02' },
@@ -24,17 +24,15 @@ const OverviewPage = () => {
   ];
   
   const cycleOptions = [
-    { value: 'cycle01-01', label: 'Cycle 01-01' },
-    { value: 'cycle01-02', label: 'Cycle 01-02' },
-    { value: 'cycle02-01', label: 'Cycle 02-01' },
-    { value: 'cycle02-02', label: 'Cycle 02-02' },
-    { value: 'cycle03-01', label: 'Cycle 03-01' },
+    { value: 'cycle01', label: 'Cycle 01' },
+    { value: 'cycle02', label: 'Cycle 02' },
+    { value: 'cycle03', label: 'Cycle 03' },
   ];
   
   const assignedToOptions = [
-    { value: 'user1', label: 'User 1' },
-    { value: 'user2', label: 'User 2' },
-    { value: 'user3', label: 'User 3' },
+    { value: 'john_doe', label: 'John Doe' },
+    { value: 'emma_wilson', label: 'Emma Wilson' },
+    { value: 'michael_chen', label: 'Michael Chen' },
   ];
   
   const [selectedReleases, setSelectedReleases] = useState<string[]>([]);
@@ -174,7 +172,11 @@ const OverviewPage = () => {
         <TabsContent value="overview" className="mt-4 p-0">
           <Card className="border border-gray-200 shadow-sm">
             <CardContent className="p-0">
-              <TestPlanTable filteredReleases={appliedFilters.releases} />
+              <TestPlanTable 
+                filteredReleases={appliedFilters.releases} 
+                filteredCycles={appliedFilters.cycles}
+                filteredAssignees={appliedFilters.assignees}
+              />
             </CardContent>
           </Card>
         </TabsContent>
