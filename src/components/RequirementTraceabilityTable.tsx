@@ -418,6 +418,12 @@ const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> 
                   )}
                 </tr>
               ))}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
-              {
-
+export default RequirementTraceabilityTable;
