@@ -17,17 +17,21 @@ import { MultiSelect } from '@/components/MultiSelect';
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
   
-  // Filter options data - updated with specified options
+  // Updated filter options data to match the new structure
   const releaseOptions = [
     { value: 'release01', label: 'Release 01' },
     { value: 'release02', label: 'Release 02' },
     { value: 'release03', label: 'Release 03' },
   ];
   
+  // Updated cycle options to match the new naming convention
   const cycleOptions = [
-    { value: 'cycle01', label: 'Cycle 01' },
-    { value: 'cycle02', label: 'Cycle 02' },
-    { value: 'cycle03', label: 'Cycle 03' },
+    { value: 'cycle01-01', label: 'Cycle 01-01' },
+    { value: 'cycle01-02', label: 'Cycle 01-02' },
+    { value: 'cycle02-01', label: 'Cycle 02-01' },
+    { value: 'cycle02-02', label: 'Cycle 02-02' },
+    { value: 'cycle03-01', label: 'Cycle 03-01' },
+    { value: 'cycle03-02', label: 'Cycle 03-02' },
   ];
   
   const assignedToOptions = [

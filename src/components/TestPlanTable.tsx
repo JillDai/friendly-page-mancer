@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -34,7 +33,7 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '1-1',
-        name: 'Cycle 01',
+        name: 'Cycle 01-01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_01', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
@@ -46,7 +45,7 @@ const testData: ReleaseData[] = [
       },
       {
         id: '1-2',
-        name: 'Cycle 02',
+        name: 'Cycle 01-02',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_06', progress: 26, caseCount: 3, assignedTo: 'Michael Chen' },
@@ -54,15 +53,6 @@ const testData: ReleaseData[] = [
           { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_08', progress: 36, caseCount: 6, assignedTo: 'Emma Wilson' },
           { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_09', progress: 57, caseCount: 3, assignedTo: 'Michael Chen' },
           { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_10', progress: 68, caseCount: 7, assignedTo: 'John Doe' }
-        ]
-      },
-      {
-        id: '1-3',
-        name: 'Cycle 03',
-        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
-        plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_11', progress: 26, caseCount: 3, assignedTo: 'Emma Wilson' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_12', progress: 46, caseCount: 5, assignedTo: 'Michael Chen' }
         ]
       }
     ]
@@ -74,7 +64,7 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '2-1',
-        name: 'Cycle 01',
+        name: 'Cycle 02-01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_13', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
@@ -86,7 +76,7 @@ const testData: ReleaseData[] = [
       },
       {
         id: '2-2',
-        name: 'Cycle 02',
+        name: 'Cycle 02-02',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_18', progress: 26, caseCount: 3, assignedTo: 'Michael Chen' },
@@ -104,7 +94,7 @@ const testData: ReleaseData[] = [
     cycles: [
       {
         id: '3-1',
-        name: 'Cycle 01',
+        name: 'Cycle 03-01',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_22', progress: 26, caseCount: 3, assignedTo: 'John Doe' },
@@ -113,20 +103,11 @@ const testData: ReleaseData[] = [
       },
       {
         id: '3-2',
-        name: 'Cycle 02',
+        name: 'Cycle 03-02',
         dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
         plans: [
           { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_24', progress: 36, caseCount: 4, assignedTo: 'Michael Chen' },
           { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_25', progress: 52, caseCount: 6, assignedTo: 'John Doe' }
-        ]
-      },
-      {
-        id: '3-3',
-        name: 'Cycle 03',
-        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
-        plans: [
-          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_26', progress: 41, caseCount: 5, assignedTo: 'Emma Wilson' },
-          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_27', progress: 63, caseCount: 7, assignedTo: 'Michael Chen' }
         ]
       }
     ]
@@ -144,14 +125,11 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({
   filteredCycles = [],
   filteredAssignees = []
 }) => {
-  // Filter the data based on selected filters
   const filterData = () => {
-    // Start with default: only the first release
     let filtered = filteredReleases.length || filteredCycles.length || filteredAssignees.length
-      ? [...testData]  // Use all data when filters are applied
-      : [testData[0]]; // Only show the first release by default
-    
-    // Filter by release
+      ? [...testData]
+      : [testData[0]];
+
     if (filteredReleases.length > 0) {
       filtered = filtered.filter(release => 
         filteredReleases.some(selectedRelease => 
@@ -160,25 +138,23 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({
         )
       );
     }
-    
-    // If we have cycle filters, filter the cycles within each release
+
     if (filteredCycles.length > 0) {
       filtered = filtered.map(release => {
         return {
           ...release,
           cycles: release.cycles.filter(cycle => {
-            // Extract the cycle number from the cycle name (Cycle XX)
-            const cycleNumber = cycle.name.replace('Cycle ', '').padStart(2, '0');
-            return filteredCycles.some(selectedCycle => 
-              selectedCycle.toLowerCase().includes(cycleNumber.toLowerCase()) ||
-              selectedCycle.toLowerCase().includes(cycle.id.split('-')[1])
-            );
+            const cycleId = cycle.name.replace('Cycle ', '');
+            return filteredCycles.some(selectedCycle => {
+              const selectedCycleId = selectedCycle.replace('cycle', '');
+              return cycleId.includes(selectedCycleId.padStart(2, '0')) || 
+                     cycleId.includes(selectedCycleId);
+            });
           })
         };
-      }).filter(release => release.cycles.length > 0); // Remove releases with no matching cycles
+      }).filter(release => release.cycles.length > 0);
     }
-    
-    // If we have assignee filters, filter the plans within each cycle
+
     if (filteredAssignees.length > 0) {
       filtered = filtered.map(release => {
         return {
@@ -189,7 +165,6 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({
               plans: cycle.plans.filter(plan => {
                 const assigneeName = plan.assignedTo;
                 return filteredAssignees.some(selectedAssignee => {
-                  // Convert the selectedAssignee (value) to a name for comparison
                   let assigneeForComparison = selectedAssignee;
                   if (selectedAssignee === 'john_doe') assigneeForComparison = 'John Doe';
                   if (selectedAssignee === 'emma_wilson') assigneeForComparison = 'Emma Wilson';
@@ -199,11 +174,11 @@ const TestPlanTable: React.FC<TestPlanTableProps> = ({
                 });
               })
             };
-          }).filter(cycle => cycle.plans.length > 0) // Remove cycles with no matching plans
+          }).filter(cycle => cycle.plans.length > 0)
         };
-      }).filter(release => release.cycles.length > 0); // Remove releases with no matching cycles
+      }).filter(release => release.cycles.length > 0);
     }
-    
+
     return filtered;
   };
 
