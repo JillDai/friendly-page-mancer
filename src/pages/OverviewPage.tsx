@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Select, 
@@ -13,15 +14,16 @@ import TestPlanTable from '@/components/TestPlanTable';
 import { ChevronDown, Search, Filter, Check, X } from 'lucide-react';
 import { MultiSelect } from '@/components/MultiSelect';
 import RequirementTraceabilityTable from '@/components/RequirementTraceabilityTable';
+import TestCoverageTable from '@/components/TestCoverageTable';
 
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
   const [activeTab, setActiveTab] = useState("overview");
   
   const releaseOptions = [
-    { value: 'release01', label: 'Release 01' },
-    { value: 'release02', label: 'Release 02' },
-    { value: 'release03', label: 'Release 03' },
+    { value: 'Release 01', label: 'Release 01' },
+    { value: 'Release 02', label: 'Release 02' },
+    { value: 'Release 03', label: 'Release 03' },
   ];
   
   const cycleOptions = [
@@ -61,18 +63,22 @@ const OverviewPage = () => {
   const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
   const [selectedTestCases, setSelectedTestCases] = useState<string[]>([]);
   
+  const [selectedTestCoverageReleases, setSelectedTestCoverageReleases] = useState<string[]>([]);
+  
   const [appliedFilters, setAppliedFilters] = useState<{
     releases: string[];
     cycles: string[];
     assignees: string[];
     requirements: string[];
     testCases: string[];
+    testCoverageReleases: string[];
   }>({
     releases: [],
     cycles: [],
     assignees: [],
     requirements: [],
-    testCases: []
+    testCases: [],
+    testCoverageReleases: []
   });
   
   const handleSearch = () => {
@@ -99,6 +105,15 @@ const OverviewPage = () => {
         ...appliedFilters,
         requirements: [...selectedRequirements],
         testCases: [...selectedTestCases]
+      });
+    } else if (activeTab === "test-coverage") {
+      console.log('Searching with Test Coverage filters:', {
+        testCoverageReleases: selectedTestCoverageReleases
+      });
+      
+      setAppliedFilters({
+        ...appliedFilters,
+        testCoverageReleases: [...selectedTestCoverageReleases]
       });
     }
   };
@@ -225,6 +240,19 @@ const OverviewPage = () => {
                 />
               </div>
             </div>
+          ) : activeTab === "test-coverage" ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Release</label>
+                <MultiSelect 
+                  options={releaseOptions}
+                  selected={selectedTestCoverageReleases}
+                  onChange={setSelectedTestCoverageReleases}
+                  placeholder="Select releases"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
+            </div>
           ) : (
             <div className="mb-6">
               <p className="text-gray-500 italic">No filters available for this section</p>
@@ -260,10 +288,14 @@ const OverviewPage = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="test-coverage">
-          <div className="py-8 text-center text-gray-500">
-            Requirement Test Coverage Report content goes here
-          </div>
+        <TabsContent value="test-coverage" className="mt-4 p-0">
+          <Card className="border border-gray-200 shadow-sm">
+            <CardContent className="p-0">
+              <TestCoverageTable 
+                filteredReleases={appliedFilters.testCoverageReleases}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="dashboard-ongoing">
           <div className="py-8 text-center text-gray-500">
