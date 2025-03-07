@@ -51,11 +51,11 @@ const OverviewPage = () => {
   
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6 text-custom-dark-teal">Overview</h1>
-      
-      <div className="mb-6">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-custom-dark-teal">Overview</h1>
+        
         <Select defaultValue="01" onValueChange={setActiveArea}>
-          <SelectTrigger className="w-56 border-2 border-gray-300 hover:border-custom-teal">
+          <SelectTrigger className="w-56 border-2 border-custom-teal/50 hover:border-custom-teal bg-white shadow-sm">
             <SelectValue placeholder="Select Area">
               Area {activeArea}
             </SelectValue>
@@ -68,84 +68,88 @@ const OverviewPage = () => {
         </Select>
       </div>
 
-      <Tabs defaultValue="overview" className="mb-6">
-        <TabsList className="border-b w-full justify-start gap-6 rounded-none bg-transparent p-0">
-          <TabsTrigger 
-            value="overview" 
-            className="border-b-2 data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
-          >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger 
-            value="requirement-traceability" 
-            className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
-          >
-            Requirement Traceability Report
-          </TabsTrigger>
-          <TabsTrigger 
-            value="test-coverage" 
-            className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
-          >
-            Requirement Test Coverage Report
-          </TabsTrigger>
-          <TabsTrigger 
-            value="dashboard-ongoing" 
-            className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
-          >
-            Dashboard Ongoing
-          </TabsTrigger>
-          <TabsTrigger 
-            value="dashboard-complete" 
-            className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
-          >
-            Dashboard Complete
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="overview" className="mb-8">
+        <div className="border-b border-gray-200">
+          <TabsList className="w-full justify-start gap-6 rounded-none bg-transparent p-0">
+            <TabsTrigger 
+              value="overview" 
+              className="border-b-2 data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="requirement-traceability" 
+              className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+            >
+              Requirement Traceability Report
+            </TabsTrigger>
+            <TabsTrigger 
+              value="test-coverage" 
+              className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+            >
+              Requirement Test Coverage Report
+            </TabsTrigger>
+            <TabsTrigger 
+              value="dashboard-ongoing" 
+              className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+            >
+              Dashboard Ongoing
+            </TabsTrigger>
+            <TabsTrigger 
+              value="dashboard-complete" 
+              className="border-b-2 border-transparent data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+            >
+              Dashboard Complete
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
         {/* Filter section */}
-        <div className="mt-6 mb-4 border-2 border-custom-pale bg-custom-pale/30 p-4 rounded-md">
-          <div className="flex items-center mb-3">
-            <Filter className="mr-2 h-5 w-5 text-custom-dark-teal" />
-            <h2 className="text-lg font-medium text-custom-dark-teal">篩選器</h2>
+        <div className="mt-6 mb-6 border border-custom-teal/20 bg-custom-pale/30 p-5 rounded-lg shadow-sm">
+          <div className="flex items-center mb-4">
+            <div className="bg-custom-teal/10 p-1.5 rounded-md">
+              <Filter className="h-5 w-5 text-custom-teal" />
+            </div>
+            <h2 className="text-lg font-medium text-custom-dark-teal ml-2">篩選器</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-medium mb-1 text-custom-dark-teal">Release</label>
+              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Release</label>
               <MultiSelect 
                 options={releaseOptions}
                 selected={selectedReleases}
                 onChange={setSelectedReleases}
                 placeholder="Select releases"
-                className="border-custom-teal/50 hover:border-custom-teal focus:border-custom-teal"
+                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1 text-custom-dark-teal">Cycle</label>
+              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Cycle</label>
               <MultiSelect 
                 options={cycleOptions}
                 selected={selectedCycles}
                 onChange={setSelectedCycles}
                 placeholder="Select cycles"
-                className="border-custom-teal/50 hover:border-custom-teal focus:border-custom-teal"
+                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1 text-custom-dark-teal">Assigned To</label>
+              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Assigned To</label>
               <MultiSelect 
                 options={assignedToOptions}
                 selected={selectedAssignees}
                 onChange={setSelectedAssignees}
                 placeholder="Select assignees"
-                className="border-custom-teal/50 hover:border-custom-teal focus:border-custom-teal"
+                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
               />
             </div>
           </div>
           
           <div className="flex justify-end">
-            <Button onClick={handleSearch} className="bg-custom-orange hover:bg-custom-orange/90 text-white">
+            <Button onClick={handleSearch} className="bg-custom-orange hover:bg-custom-orange/90 text-white font-medium shadow-sm">
               <Search className="mr-2 h-4 w-4" />
               Search
             </Button>
@@ -153,7 +157,7 @@ const OverviewPage = () => {
         </div>
         
         <TabsContent value="overview" className="mt-4 p-0">
-          <Card className="border-2 border-gray-200">
+          <Card className="border border-gray-200 shadow-sm">
             <CardContent className="p-0">
               <TestPlanTable />
             </CardContent>

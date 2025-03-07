@@ -62,23 +62,23 @@ const testData: SprintData[] = [
 
 const TestPlanTable = () => {
   return (
-    <div>
+    <div className="rounded-md overflow-hidden shadow-sm">
       <table className="w-full border-collapse">
-        <thead className="bg-black text-white">
+        <thead className="bg-custom-teal text-white">
           <tr>
-            <th className="py-3 px-4 text-left">Release</th>
-            <th className="py-3 px-4 text-left">Cycle</th>
-            <th className="py-3 px-4 text-left">Test Plan</th>
-            <th className="py-3 px-4 text-right w-20">%</th>
-            <th className="py-3 px-4 text-center w-12">#</th>
-            <th className="py-3 px-4 text-left">Owner</th>
+            <th className="py-3 px-4 text-left font-medium">Release</th>
+            <th className="py-3 px-4 text-left font-medium">Cycle</th>
+            <th className="py-3 px-4 text-left font-medium">Test Plan</th>
+            <th className="py-3 px-4 text-right w-20 font-medium">%</th>
+            <th className="py-3 px-4 text-center w-12 font-medium">#</th>
+            <th className="py-3 px-4 text-left font-medium">Owner</th>
           </tr>
         </thead>
         <tbody>
           {testData.map((sprint) => 
             sprint.cycles.flatMap((cycle, cIndex) => 
               cycle.plans.map((plan, pIndex) => (
-                <tr key={`${cycle.id}-${pIndex}`} className="border-b border-gray-200">
+                <tr key={`${cycle.id}-${pIndex}`} className="border-b border-gray-200 hover:bg-custom-pale/30 transition-colors">
                   {pIndex === 0 && cIndex === 0 ? (
                     <td 
                       className="py-3 px-4 align-top" 
@@ -86,7 +86,7 @@ const TestPlanTable = () => {
                     >
                       <div className="font-medium">{sprint.name}</div>
                       <div className="text-gray-500 text-sm mt-1">{sprint.dateRange}</div>
-                      <Button variant="outline" className="mt-2 text-sm py-1 px-3 h-auto border-black">
+                      <Button variant="outline" className="mt-2 text-sm py-1 px-3 h-auto border-custom-teal text-custom-teal hover:bg-custom-pale hover:text-custom-teal">
                         檢視
                       </Button>
                     </td>
@@ -99,17 +99,17 @@ const TestPlanTable = () => {
                     >
                       <div className="font-medium">{cycle.name}</div>
                       <div className="text-gray-500 text-sm mt-1">{cycle.dateRange}</div>
-                      <Button variant="outline" className="mt-2 text-sm py-1 px-3 h-auto border-black">
+                      <Button variant="outline" className="mt-2 text-sm py-1 px-3 h-auto border-custom-teal text-custom-teal hover:bg-custom-pale hover:text-custom-teal">
                         檢視
                       </Button>
                     </td>
                   ) : null}
                   
                   <td className="py-3 px-4">
-                    <div className="text-blue-600">{plan.id}</div>
-                    <div className="flex items-center gap-2">
+                    <div className="text-custom-teal font-medium">{plan.id}</div>
+                    <div className="flex items-center gap-2 mt-1">
                       <span className={cn(
-                        "px-2 py-0.5 text-xs rounded-sm",
+                        "px-2 py-0.5 text-xs rounded-full font-medium",
                         plan.status === 'New' && "bg-blue-100 text-blue-800",
                         plan.status === 'Active' && "bg-green-100 text-green-800",
                         plan.status === 'Closed' && "bg-gray-100 text-gray-800"
@@ -121,6 +121,7 @@ const TestPlanTable = () => {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <span className={cn(
+                      "font-medium",
                       plan.progress < 30 && "text-red-600",
                       plan.progress >= 30 && plan.progress < 70 && "text-blue-600",
                       plan.progress >= 70 && "text-green-600"
@@ -128,7 +129,7 @@ const TestPlanTable = () => {
                       {plan.progress}%
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-center">
+                  <td className="py-3 px-4 text-center font-medium">
                     {plan.caseCount}
                   </td>
                   <td className="py-3 px-4">
@@ -139,13 +140,13 @@ const TestPlanTable = () => {
             )
           )}
         </tbody>
-        <tfoot className="bg-gray-100">
+        <tfoot className="bg-custom-pale/50">
           <tr>
             <td className="py-2 px-4 text-center">1</td>
             <td className="py-2 px-4 text-center">2</td>
             <td className="py-2 px-4"></td>
             <td className="py-2 px-4"></td>
-            <td className="py-2 px-4 text-center">9</td>
+            <td className="py-2 px-4 text-center font-medium">9</td>
             <td className="py-2 px-4"></td>
           </tr>
         </tfoot>
