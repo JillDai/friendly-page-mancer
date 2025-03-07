@@ -9,11 +9,45 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import TestPlanTable from '@/components/TestPlanTable';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Search, Filter, Check, X } from 'lucide-react';
+import { MultiSelect } from '@/components/MultiSelect';
 
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
+  
+  // Filter options data
+  const releaseOptions = [
+    { value: 'sprint01', label: 'Sprint 01' },
+    { value: 'sprint02', label: 'Sprint 02' },
+    { value: 'sprint03', label: 'Sprint 03' },
+  ];
+  
+  const cycleOptions = [
+    { value: 'cycle01-01', label: 'Cycle 01-01' },
+    { value: 'cycle01-02', label: 'Cycle 01-02' },
+    { value: 'cycle02-01', label: 'Cycle 02-01' },
+  ];
+  
+  const assignedToOptions = [
+    { value: 'user1', label: 'User 1' },
+    { value: 'user2', label: 'User 2' },
+    { value: 'user3', label: 'User 3' },
+  ];
+  
+  const [selectedReleases, setSelectedReleases] = useState([]);
+  const [selectedCycles, setSelectedCycles] = useState([]);
+  const [selectedAssignees, setSelectedAssignees] = useState([]);
+  
+  const handleSearch = () => {
+    console.log('Searching with filters:', {
+      releases: selectedReleases,
+      cycles: selectedCycles,
+      assignees: selectedAssignees
+    });
+    // Here you would implement the actual filtering logic
+  };
   
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -67,6 +101,54 @@ const OverviewPage = () => {
             Dashboard Complete
           </TabsTrigger>
         </TabsList>
+        
+        {/* Filter section */}
+        <div className="mt-6 mb-4 border-2 border-gray-200 p-4 rounded-md">
+          <div className="flex items-center mb-3">
+            <Filter className="mr-2 h-5 w-5" />
+            <h2 className="text-lg font-medium">篩選器</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Release</label>
+              <MultiSelect 
+                options={releaseOptions}
+                selected={selectedReleases}
+                onChange={setSelectedReleases}
+                placeholder="Select releases"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Cycle</label>
+              <MultiSelect 
+                options={cycleOptions}
+                selected={selectedCycles}
+                onChange={setSelectedCycles}
+                placeholder="Select cycles"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Assigned To</label>
+              <MultiSelect 
+                options={assignedToOptions}
+                selected={selectedAssignees}
+                onChange={setSelectedAssignees}
+                placeholder="Select assignees"
+              />
+            </div>
+          </div>
+          
+          <div className="flex justify-end">
+            <Button onClick={handleSearch} className="bg-black hover:bg-gray-800">
+              <Search className="mr-2 h-4 w-4" />
+              Search
+            </Button>
+          </div>
+        </div>
+        
         <TabsContent value="overview" className="mt-4 p-0">
           <Card className="border-2">
             <CardContent className="p-0">
