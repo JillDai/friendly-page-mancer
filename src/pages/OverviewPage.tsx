@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import TestPlanTable from '@/components/TestPlanTable';
 import { ChevronDown, Search, Filter, Check, X } from 'lucide-react';
 import { MultiSelect } from '@/components/MultiSelect';
+import RequirementTraceabilityTable from '@/components/RequirementTraceabilityTable';
 
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
@@ -185,10 +186,12 @@ const OverviewPage = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="requirement-traceability">
-          <div className="py-8 text-center text-gray-500">
-            Requirement Traceability Report content goes here
-          </div>
+        <TabsContent value="requirement-traceability" className="mt-4 p-0">
+          <Card className="border border-gray-200 shadow-sm">
+            <CardContent className="p-0">
+              <RequirementTraceabilityTable />
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="test-coverage">
           <div className="py-8 text-center text-gray-500">
