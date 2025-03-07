@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Select, 
@@ -17,15 +16,14 @@ import RequirementTraceabilityTable from '@/components/RequirementTraceabilityTa
 
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
+  const [activeTab, setActiveTab] = useState("overview");
   
-  // Updated filter options data to match the new structure
   const releaseOptions = [
     { value: 'release01', label: 'Release 01' },
     { value: 'release02', label: 'Release 02' },
     { value: 'release03', label: 'Release 03' },
   ];
   
-  // Updated cycle options to match the new naming convention
   const cycleOptions = [
     { value: 'cycle01-01', label: 'Cycle 01-01' },
     { value: 'cycle01-02', label: 'Cycle 01-02' },
@@ -40,32 +38,69 @@ const OverviewPage = () => {
     { value: 'emma_wilson', label: 'Emma Wilson' },
     { value: 'michael_chen', label: 'Michael Chen' },
   ];
+
+  const requirementOptions = [
+    { value: 'TCTF-607', label: 'TCTF-607: Pre-SIT(Global契約)_Story_1' },
+    { value: 'TCTF-159', label: 'TCTF-159: 定存解約' },
+    { value: 'TCTF-158', label: 'TCTF-158: 定存盤戶-聯別(其他)' },
+  ];
+  
+  const testCaseOptions = [
+    { value: 'TCTF-625', label: 'TCTF-625' },
+    { value: 'TCTF-627', label: 'TCTF-627' },
+    { value: 'TCTF-619', label: 'TCTF-619' },
+    { value: 'TCTF-495', label: 'TCTF-495' },
+    { value: 'TCTF-461', label: 'TCTF-461' },
+    { value: 'TCTF-531', label: 'TCTF-531' },
+  ];
   
   const [selectedReleases, setSelectedReleases] = useState<string[]>([]);
   const [selectedCycles, setSelectedCycles] = useState<string[]>([]);
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  
+  const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
+  const [selectedTestCases, setSelectedTestCases] = useState<string[]>([]);
+  
   const [appliedFilters, setAppliedFilters] = useState<{
     releases: string[];
     cycles: string[];
     assignees: string[];
+    requirements: string[];
+    testCases: string[];
   }>({
     releases: [],
     cycles: [],
-    assignees: []
+    assignees: [],
+    requirements: [],
+    testCases: []
   });
   
   const handleSearch = () => {
-    console.log('Searching with filters:', {
-      releases: selectedReleases,
-      cycles: selectedCycles,
-      assignees: selectedAssignees
-    });
-    
-    setAppliedFilters({
-      releases: [...selectedReleases],
-      cycles: [...selectedCycles],
-      assignees: [...selectedAssignees]
-    });
+    if (activeTab === "overview") {
+      console.log('Searching with Overview filters:', {
+        releases: selectedReleases,
+        cycles: selectedCycles,
+        assignees: selectedAssignees
+      });
+      
+      setAppliedFilters({
+        ...appliedFilters,
+        releases: [...selectedReleases],
+        cycles: [...selectedCycles],
+        assignees: [...selectedAssignees]
+      });
+    } else if (activeTab === "requirement-traceability") {
+      console.log('Searching with Requirement Traceability filters:', {
+        requirements: selectedRequirements,
+        testCases: selectedTestCases
+      });
+      
+      setAppliedFilters({
+        ...appliedFilters,
+        requirements: [...selectedRequirements],
+        testCases: [...selectedTestCases]
+      });
+    }
   };
   
   return (
@@ -87,7 +122,7 @@ const OverviewPage = () => {
         </Select>
       </div>
 
-      <Tabs defaultValue="overview" className="mb-8">
+      <Tabs defaultValue="overview" className="mb-8" onValueChange={setActiveTab}>
         <div className="border-b border-gray-200">
           <TabsList className="w-full justify-start gap-6 rounded-none bg-transparent p-0">
             <TabsTrigger 
@@ -123,7 +158,6 @@ const OverviewPage = () => {
           </TabsList>
         </div>
         
-        {/* Filter section */}
         <div className="mt-6 mb-6 border border-custom-teal/20 bg-custom-pale/30 p-5 rounded-lg shadow-sm">
           <div className="flex items-center mb-4">
             <div className="bg-custom-teal/10 p-1.5 rounded-md">
@@ -132,40 +166,70 @@ const OverviewPage = () => {
             <h2 className="text-lg font-medium text-custom-dark-teal ml-2">篩選器</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Release</label>
-              <MultiSelect 
-                options={releaseOptions}
-                selected={selectedReleases}
-                onChange={setSelectedReleases}
-                placeholder="Select releases"
-                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
-              />
+          {activeTab === "overview" ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Release</label>
+                <MultiSelect 
+                  options={releaseOptions}
+                  selected={selectedReleases}
+                  onChange={setSelectedReleases}
+                  placeholder="Select releases"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Cycle</label>
+                <MultiSelect 
+                  options={cycleOptions}
+                  selected={selectedCycles}
+                  onChange={setSelectedCycles}
+                  placeholder="Select cycles"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Assigned To</label>
+                <MultiSelect 
+                  options={assignedToOptions}
+                  selected={selectedAssignees}
+                  onChange={setSelectedAssignees}
+                  placeholder="Select assignees"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Cycle</label>
-              <MultiSelect 
-                options={cycleOptions}
-                selected={selectedCycles}
-                onChange={setSelectedCycles}
-                placeholder="Select cycles"
-                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
-              />
+          ) : activeTab === "requirement-traceability" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Requirement</label>
+                <MultiSelect 
+                  options={requirementOptions}
+                  selected={selectedRequirements}
+                  onChange={setSelectedRequirements}
+                  placeholder="Select requirements"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Test Case</label>
+                <MultiSelect 
+                  options={testCaseOptions}
+                  selected={selectedTestCases}
+                  onChange={setSelectedTestCases}
+                  placeholder="Select test cases"
+                  className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
+                />
+              </div>
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2 text-custom-dark-teal">Assigned To</label>
-              <MultiSelect 
-                options={assignedToOptions}
-                selected={selectedAssignees}
-                onChange={setSelectedAssignees}
-                placeholder="Select assignees"
-                className="border-custom-teal/40 hover:border-custom-teal focus:border-custom-teal"
-              />
+          ) : (
+            <div className="mb-6">
+              <p className="text-gray-500 italic">No filters available for this section</p>
             </div>
-          </div>
+          )}
           
           <div className="flex justify-end">
             <Button onClick={handleSearch} className="bg-custom-orange hover:bg-custom-orange/90 text-white font-medium shadow-sm">
@@ -189,7 +253,10 @@ const OverviewPage = () => {
         <TabsContent value="requirement-traceability" className="mt-4 p-0">
           <Card className="border border-gray-200 shadow-sm">
             <CardContent className="p-0">
-              <RequirementTraceabilityTable />
+              <RequirementTraceabilityTable 
+                filteredRequirements={appliedFilters.requirements}
+                filteredTestCases={appliedFilters.testCases}
+              />
             </CardContent>
           </Card>
         </TabsContent>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FileText, FileCode, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -29,6 +28,11 @@ interface TraceabilityItem {
     title: string;
     severity: 'Medium' | 'High' | 'Low';
   }>;
+}
+
+interface RequirementTraceabilityTableProps {
+  filteredRequirements?: string[];
+  filteredTestCases?: string[];
 }
 
 const traceabilityData: TraceabilityItem[] = [
@@ -162,7 +166,33 @@ const traceabilityData: TraceabilityItem[] = [
   }
 ];
 
-const RequirementTraceabilityTable: React.FC = () => {
+const RequirementTraceabilityTable: React.FC<RequirementTraceabilityTableProps> = ({ 
+  filteredRequirements = [], 
+  filteredTestCases = [] 
+}) => {
+  
+  const filteredData = traceabilityData.filter(item => {
+    if (filteredRequirements.length === 0 && filteredTestCases.length === 0) {
+      return true;
+    }
+    
+    const matchesRequirement = filteredRequirements.length === 0 || 
+      filteredRequirements.includes(item.requirement.id);
+    
+    const hasMatchingTestCase = filteredTestCases.length === 0 || 
+      item.testCases.some(tc => filteredTestCases.includes(tc.id));
+    
+    return matchesRequirement && hasMatchingTestCase;
+  });
+
+  if (filteredData.length === 0) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        No matching records found. Please adjust your filter criteria.
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
@@ -176,9 +206,8 @@ const RequirementTraceabilityTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {traceabilityData.map((item, index) => (
+          {filteredData.map((item, index) => (
             <React.Fragment key={item.id}>
-              {/* Requirement Column */}
               <tr className="border-b border-gray-200">
                 <td className="py-3 px-4 align-top" rowSpan={Math.max(
                   item.testCaseTemplates.length,
@@ -205,7 +234,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                   </div>
                 </td>
 
-                {/* Test Case Templates Column (First Row) */}
                 {item.testCaseTemplates.length > 0 ? (
                   <td className="py-3 px-4 align-top">
                     <div className="flex gap-2 items-start">
@@ -229,7 +257,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                   <td className="py-3 px-4"></td>
                 )}
 
-                {/* Test Cases Column (First Row) */}
                 {item.testCases.length > 0 ? (
                   <td className="py-3 px-4 align-top">
                     <div className="flex gap-2 items-start">
@@ -247,7 +274,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                   <td className="py-3 px-4"></td>
                 )}
 
-                {/* Executions Column (First Row) */}
                 {item.executions.length > 0 ? (
                   <td className="py-3 px-4 align-top">
                     <div>
@@ -269,7 +295,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                   <td className="py-3 px-4"></td>
                 )}
 
-                {/* Defects Column (First Row) */}
                 {item.defects.length > 0 ? (
                   <td className="py-3 px-4 align-top">
                     <div className="flex gap-2 items-start">
@@ -302,7 +327,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                 )}
               </tr>
 
-              {/* Additional Rows for Test Case Templates */}
               {item.testCaseTemplates.slice(1).map((template, tIndex) => (
                 <tr key={`template-${tIndex}`} className="border-b border-gray-200">
                   <td className="py-3 px-4 align-top">
@@ -324,7 +348,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                     </div>
                   </td>
 
-                  {/* Test Cases (Additional Rows) */}
                   {item.testCases[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div className="flex gap-2 items-start">
@@ -342,7 +365,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                     <td className="py-3 px-4"></td>
                   )}
 
-                  {/* Executions (Additional Rows) */}
                   {item.executions[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div>
@@ -364,7 +386,6 @@ const RequirementTraceabilityTable: React.FC = () => {
                     <td className="py-3 px-4"></td>
                   )}
 
-                  {/* Defects (Additional Rows) */}
                   {item.defects[tIndex + 1] ? (
                     <td className="py-3 px-4 align-top">
                       <div className="flex gap-2 items-start">
@@ -398,86 +419,5 @@ const RequirementTraceabilityTable: React.FC = () => {
                 </tr>
               ))}
 
-              {/* Additional rows when there are more test cases than templates */}
-              {item.testCases.slice(item.testCaseTemplates.length).map((testCase, tcIndex) => {
-                const actualIndex = tcIndex + item.testCaseTemplates.length;
-                if (actualIndex >= item.testCaseTemplates.length) {
-                  return (
-                    <tr key={`testcase-${tcIndex}`} className="border-b border-gray-200">
-                      <td className="py-3 px-4"></td>
-                      <td className="py-3 px-4 align-top">
-                        <div className="flex gap-2 items-start">
-                          <div className="min-w-6 mt-0.5">
-                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-cyan-500 text-white">
-                              <FileText size={14} />
-                            </span>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-custom-teal">{testCase.id}</div>
-                          </div>
-                        </div>
-                      </td>
-                      {item.executions[actualIndex] ? (
-                        <td className="py-3 px-4 align-top">
-                          <div>
-                            <div className="mb-1">Execution: {item.executions[actualIndex].id}</div>
-                            <div className="text-sm text-gray-600">{item.executions[actualIndex].plan}</div>
-                            <div className="mt-2">
-                              <span className={cn(
-                                "px-4 py-1 text-xs rounded-full font-medium text-white",
-                                item.executions[actualIndex].status === 'Fail' && "bg-red-500",
-                                item.executions[actualIndex].status === 'Open' && "bg-gray-400",
-                                item.executions[actualIndex].status === 'Pass' && "bg-green-500"
-                              )}>
-                                {item.executions[actualIndex].status}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                      ) : (
-                        <td className="py-3 px-4"></td>
-                      )}
-                      {item.defects[actualIndex] ? (
-                        <td className="py-3 px-4 align-top">
-                          <div className="flex gap-2 items-start">
-                            <div className="min-w-6 mt-0.5">
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-red-500 text-white">
-                                <AlertCircle size={14} />
-                              </span>
-                            </div>
-                            <div>
-                              <div className="font-semibold text-custom-teal">{item.defects[actualIndex].id}</div>
-                              <div className="flex gap-2 items-center mt-1">
-                                <span className={cn(
-                                  "px-2 py-0.5 text-xs rounded-full font-medium text-white",
-                                  item.defects[actualIndex].status === 'CLOSED' && "bg-green-600",
-                                  item.defects[actualIndex].status === 'OPEN' && "bg-red-500"
-                                )}>
-                                  {item.defects[actualIndex].status}
-                                </span>
-                              </div>
-                              <div className="mt-2 text-sm">{item.defects[actualIndex].title}</div>
-                              <div className="mt-1 flex items-center">
-                                <span className="h-2 w-2 bg-yellow-500 mr-1.5"></span>
-                                <span className="text-sm text-gray-600">{item.defects[actualIndex].severity}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      ) : (
-                        <td className="py-3 px-4"></td>
-                      )}
-                    </tr>
-                  );
-                }
-                return null;
-              })}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+              {
 
-export default RequirementTraceabilityTable;
