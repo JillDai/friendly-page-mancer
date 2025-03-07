@@ -19,17 +19,17 @@ interface CycleData {
   plans: TestPlan[];
 }
 
-interface SprintData {
+interface ReleaseData {
   id: string;
   name: string;
   dateRange: string;
   cycles: CycleData[];
 }
 
-const testData: SprintData[] = [
+const testData: ReleaseData[] = [
   {
     id: '1',
-    name: 'Sprint 01',
+    name: 'Release 01',
     dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
     cycles: [
       {
@@ -57,10 +57,76 @@ const testData: SprintData[] = [
         ]
       }
     ]
+  },
+  {
+    id: '2',
+    name: 'Release 02',
+    dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+    cycles: [
+      {
+        id: '2-1',
+        name: 'Cycle 02-01',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_11', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_12', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_13', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_14', progress: 57, caseCount: 3, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_15', progress: 68, caseCount: 7, assignedTo: 'Assigned to' }
+        ]
+      },
+      {
+        id: '2-2',
+        name: 'Cycle 02-02',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_16', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_17', progress: 46, caseCount: 5, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_18', progress: 36, caseCount: 6, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Closed', title: 'Test Plan Title_19', progress: 57, caseCount: 3, assignedTo: 'Assigned to' }
+        ]
+      }
+    ]
+  },
+  {
+    id: '3',
+    name: 'Release 03',
+    dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+    cycles: [
+      {
+        id: '3-1',
+        name: 'Cycle 03-01',
+        dateRange: 'YYYY/MM/DD - YYYY/MM/DD',
+        plans: [
+          { id: 'Test Plan_ID', status: 'New', title: 'Test Plan Title_20', progress: 26, caseCount: 3, assignedTo: 'Assigned to' },
+          { id: 'Test Plan_ID', status: 'Active', title: 'Test Plan Title_21', progress: 46, caseCount: 5, assignedTo: 'Assigned to' }
+        ]
+      }
+    ]
   }
 ];
 
-const TestPlanTable = () => {
+interface TestPlanTableProps {
+  filteredReleases?: string[];
+}
+
+const TestPlanTable: React.FC<TestPlanTableProps> = ({ filteredReleases }) => {
+  // Filter the data based on selected releases
+  const filterData = () => {
+    if (!filteredReleases || filteredReleases.length === 0) {
+      return testData;
+    }
+    
+    return testData.filter(release => 
+      filteredReleases.some(selectedRelease => 
+        selectedRelease.toLowerCase() === `release${release.id.padStart(2, '0')}` || 
+        selectedRelease.toLowerCase() === `release${release.id}`
+      )
+    );
+  };
+
+  const filteredData = filterData();
+  
   return (
     <div className="rounded-md overflow-hidden shadow-sm">
       <table className="w-full border-collapse">
@@ -75,17 +141,17 @@ const TestPlanTable = () => {
           </tr>
         </thead>
         <tbody>
-          {testData.map((sprint) => 
-            sprint.cycles.flatMap((cycle, cIndex) => 
+          {filteredData.map((release) => 
+            release.cycles.flatMap((cycle, cIndex) => 
               cycle.plans.map((plan, pIndex) => (
                 <tr key={`${cycle.id}-${pIndex}`} className="border-b border-gray-200 hover:bg-custom-pale/30 transition-colors">
                   {pIndex === 0 && cIndex === 0 ? (
                     <td 
                       className="py-3 px-4 align-top" 
-                      rowSpan={sprint.cycles.reduce((acc, c) => acc + c.plans.length, 0)}
+                      rowSpan={release.cycles.reduce((acc, c) => acc + c.plans.length, 0)}
                     >
-                      <div className="font-medium">{sprint.name}</div>
-                      <div className="text-gray-500 text-sm mt-1">{sprint.dateRange}</div>
+                      <div className="font-medium">{release.name}</div>
+                      <div className="text-gray-500 text-sm mt-1">{release.dateRange}</div>
                       <Button variant="outline" className="mt-2 text-sm py-1 px-3 h-auto border-custom-teal text-custom-teal hover:bg-custom-pale hover:text-custom-teal">
                         檢視
                       </Button>
@@ -142,11 +208,17 @@ const TestPlanTable = () => {
         </tbody>
         <tfoot className="bg-custom-pale/50">
           <tr>
-            <td className="py-2 px-4 text-center">1</td>
-            <td className="py-2 px-4 text-center">2</td>
+            <td className="py-2 px-4 text-center">{filteredData.length}</td>
+            <td className="py-2 px-4 text-center">
+              {filteredData.reduce((acc, release) => acc + release.cycles.length, 0)}
+            </td>
             <td className="py-2 px-4"></td>
             <td className="py-2 px-4"></td>
-            <td className="py-2 px-4 text-center font-medium">9</td>
+            <td className="py-2 px-4 text-center font-medium">
+              {filteredData.reduce((acc, release) => 
+                acc + release.cycles.reduce((cycleAcc, cycle) => 
+                  cycleAcc + cycle.plans.reduce((planAcc, plan) => planAcc + plan.caseCount, 0), 0), 0)}
+            </td>
             <td className="py-2 px-4"></td>
           </tr>
         </tfoot>

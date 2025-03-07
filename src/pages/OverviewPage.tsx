@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Select, 
@@ -19,15 +18,17 @@ const OverviewPage = () => {
   
   // Filter options data
   const releaseOptions = [
-    { value: 'sprint01', label: 'Sprint 01' },
-    { value: 'sprint02', label: 'Sprint 02' },
-    { value: 'sprint03', label: 'Sprint 03' },
+    { value: 'release01', label: 'Release 01' },
+    { value: 'release02', label: 'Release 02' },
+    { value: 'release03', label: 'Release 03' },
   ];
   
   const cycleOptions = [
     { value: 'cycle01-01', label: 'Cycle 01-01' },
     { value: 'cycle01-02', label: 'Cycle 01-02' },
     { value: 'cycle02-01', label: 'Cycle 02-01' },
+    { value: 'cycle02-02', label: 'Cycle 02-02' },
+    { value: 'cycle03-01', label: 'Cycle 03-01' },
   ];
   
   const assignedToOptions = [
@@ -36,9 +37,18 @@ const OverviewPage = () => {
     { value: 'user3', label: 'User 3' },
   ];
   
-  const [selectedReleases, setSelectedReleases] = useState([]);
-  const [selectedCycles, setSelectedCycles] = useState([]);
-  const [selectedAssignees, setSelectedAssignees] = useState([]);
+  const [selectedReleases, setSelectedReleases] = useState<string[]>([]);
+  const [selectedCycles, setSelectedCycles] = useState<string[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [appliedFilters, setAppliedFilters] = useState<{
+    releases: string[];
+    cycles: string[];
+    assignees: string[];
+  }>({
+    releases: [],
+    cycles: [],
+    assignees: []
+  });
   
   const handleSearch = () => {
     console.log('Searching with filters:', {
@@ -46,7 +56,12 @@ const OverviewPage = () => {
       cycles: selectedCycles,
       assignees: selectedAssignees
     });
-    // Here you would implement the actual filtering logic
+    
+    setAppliedFilters({
+      releases: [...selectedReleases],
+      cycles: [...selectedCycles],
+      assignees: [...selectedAssignees]
+    });
   };
   
   return (
@@ -73,7 +88,7 @@ const OverviewPage = () => {
           <TabsList className="w-full justify-start gap-6 rounded-none bg-transparent p-0">
             <TabsTrigger 
               value="overview" 
-              className="border-b-2 data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent"
+              className="border-b-2 data-[state=active]:border-custom-teal data-[state=active]:text-custom-teal data-[state=active]:font-semibold data-[state=active]:shadow-none px-2 py-2 rounded-none bg-transparent border-transparent"
             >
               Overview
             </TabsTrigger>
@@ -159,7 +174,7 @@ const OverviewPage = () => {
         <TabsContent value="overview" className="mt-4 p-0">
           <Card className="border border-gray-200 shadow-sm">
             <CardContent className="p-0">
-              <TestPlanTable />
+              <TestPlanTable filteredReleases={appliedFilters.releases} />
             </CardContent>
           </Card>
         </TabsContent>
