@@ -42,8 +42,8 @@ const DashboardOngoing: React.FC = () => {
     { id: "1", columns: ["Release 01-Cycle 01", "Test Plan Title", "Y/Y/Y/MM/DD", "Y/Y/Y/MM/DD", "SA", "18", "44", "99.58% (239/240)", "78% (173/221)", "<90.56%", "OK"] },
   ];
 
-  const defectStatusHeaders = ["Release", "Cycle", "總計", "已修正%", "待修正%"];
-  const defectStatusRows = [
+  const defectDistributionHeaders = ["Release", "Cycle", "總計", "已修正%", "待修正%"];
+  const defectDistributionRows = [
     { id: "1", columns: ["Release 01-Sprint 01", "Release 01-Cycle 01", 230, "85%", "15%"] },
     { id: "2", columns: ["Release 01-Sprint 02", "Release 01-Cycle 02", 167, "96%", "4%"] },
     { id: "3", columns: ["Release 02-Sprint 01", "Release 02-Cycle 01", 7, "86%", "14%"] },
@@ -74,6 +74,55 @@ const DashboardOngoing: React.FC = () => {
     { id: "5", columns: ["Total", 0, 0, 0, 0, 0] },
   ];
 
+  // New additional tables
+  const defectDeviationHeaders = ["Release", "Cycle", "Planned", "Actual", "Deviation %"];
+  const defectDeviationRows = [
+    { id: "1", columns: ["Release 01-Sprint 01", "Release 01-Cycle 01", 200, 230, "15%"] },
+    { id: "2", columns: ["Release 01-Sprint 02", "Release 01-Cycle 02", 180, 167, "-7.2%"] },
+    { id: "3", columns: ["Release 02-Sprint 01", "Release 02-Cycle 01", 10, 7, "-30%"] },
+  ];
+
+  const defectFixRateHeaders = ["Release", "Cycle", "Total", "On-time Fix", "Fix Rate %"];
+  const defectFixRateRows = [
+    { id: "1", columns: ["Release 01-Sprint 01", "Release 01-Cycle 01", 230, 195, "84.8%"] },
+    { id: "2", columns: ["Release 01-Sprint 02", "Release 01-Cycle 02", 167, 159, "95.2%"] },
+    { id: "3", columns: ["Release 02-Sprint 01", "Release 02-Cycle 01", 7, 6, "85.7%"] },
+  ];
+
+  const openDefectsHeaders = ["ID", "Title", "Priority", "Severity", "Status", "Assigned To", "Due Date"];
+  const openDefectsRows = [
+    { id: "1", columns: ["DEF-001", "Login failure on mobile devices", "High", "2", "In Progress", "John Doe", "2025-04-15"] },
+    { id: "2", columns: ["DEF-002", "Data not saving in profile", "Medium", "3", "Open", "Jane Smith", "2025-04-18"] },
+    { id: "3", columns: ["DEF-003", "UI alignment issues in reports", "Low", "4", "In Review", "Alex Johnson", "2025-04-20"] },
+  ];
+
+  const irStatusHeaders = ["Status", "Count", "Percentage"];
+  const irStatusRows = [
+    { id: "1", columns: ["Open", 28, "35%"] },
+    { id: "2", columns: ["In Progress", 15, "18.75%"] },
+    { id: "3", columns: ["Resolved", 20, "25%"] },
+    { id: "4", columns: ["Closed", 17, "21.25%"] },
+    { id: "5", columns: ["Total", 80, "100%"] },
+  ];
+
+  const irSystemHeaders = ["System", "Count", "Percentage"];
+  const irSystemRows = [
+    { id: "1", columns: ["Frontend", 32, "40%"] },
+    { id: "2", columns: ["Backend", 25, "31.25%"] },
+    { id: "3", columns: ["Database", 14, "17.5%"] },
+    { id: "4", columns: ["Integration", 9, "11.25%"] },
+    { id: "5", columns: ["Total", 80, "100%"] },
+  ];
+
+  const irInjectionHeaders = ["Phase", "Count", "Percentage"];
+  const irInjectionRows = [
+    { id: "1", columns: ["Requirements", 12, "15%"] },
+    { id: "2", columns: ["Design", 18, "22.5%"] },
+    { id: "3", columns: ["Development", 35, "43.75%"] },
+    { id: "4", columns: ["Testing", 15, "18.75%"] },
+    { id: "5", columns: ["Total", 80, "100%"] },
+  ];
+
   const handleSearch = () => {
     console.log("Search clicked");
   };
@@ -82,25 +131,6 @@ const DashboardOngoing: React.FC = () => {
     <div>
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
         <FilterToolbar onSearch={handleSearch} />
-      </div>
-      
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <DonutChart 
-          title="測試執行狀態" 
-          data={testExecutionData}
-          centerText="505"
-        />
-        <DonutChart 
-          title="測試案例依階段劃分比重" 
-          data={testCaseByStageData}
-          centerText="330"
-        />
-        <DonutChart 
-          title="測試案例依結果劃分比重" 
-          data={testCaseByResultData}
-          centerText="1572"
-        />
       </div>
       
       {/* Release Status Table */}
@@ -130,12 +160,12 @@ const DashboardOngoing: React.FC = () => {
         />
       </div>
       
-      {/* Defect Status Table */}
+      {/* Defect Distribution Table */}
       <div className="mb-8">
         <StatusTable 
-          title="正在測試階段 by Cycle" 
-          headers={defectStatusHeaders}
-          rows={defectStatusRows}
+          title="正負向案例分佈 by Cycle" 
+          headers={defectDistributionHeaders}
+          rows={defectDistributionRows}
         />
       </div>
       
@@ -157,7 +187,7 @@ const DashboardOngoing: React.FC = () => {
         />
       </div>
       
-      {/* Defect Entry Table */}
+      {/* Defect System Analysis Table */}
       <div className="mb-8">
         <StatusTable 
           title="缺陷分析 by 系統" 
@@ -166,12 +196,80 @@ const DashboardOngoing: React.FC = () => {
         />
       </div>
       
-      {/* Extra Table */}
+      {/* Defect Entry Phase Table */}
       <div className="mb-8">
         <StatusTable 
           title="缺陷進入階段" 
           headers={defectEntryHeaders}
           rows={defectEntryRows}
+        />
+      </div>
+      
+      {/* New Tables */}
+      <div className="mb-8">
+        <StatusTable 
+          title="缺陷偏差率" 
+          headers={defectDeviationHeaders}
+          rows={defectDeviationRows}
+        />
+      </div>
+      
+      <div className="mb-8">
+        <StatusTable 
+          title="缺陷準時修復率" 
+          headers={defectFixRateHeaders}
+          rows={defectFixRateRows}
+        />
+      </div>
+      
+      {/* Charts Row - Moved here between fix rate and open defects */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <DonutChart 
+          title="測試執行狀態" 
+          data={testExecutionData}
+          centerText="505"
+        />
+        <DonutChart 
+          title="測試案例依階段劃分比重" 
+          data={testCaseByStageData}
+          centerText="330"
+        />
+        <DonutChart 
+          title="測試案例依結果劃分比重" 
+          data={testCaseByResultData}
+          centerText="1572"
+        />
+      </div>
+      
+      <div className="mb-8">
+        <StatusTable 
+          title="未關閉缺陷清單" 
+          headers={openDefectsHeaders}
+          rows={openDefectsRows}
+        />
+      </div>
+      
+      <div className="mb-8">
+        <StatusTable 
+          title="IR 分佈 By 狀態" 
+          headers={irStatusHeaders}
+          rows={irStatusRows}
+        />
+      </div>
+      
+      <div className="mb-8">
+        <StatusTable 
+          title="IR 分佈 By 系統" 
+          headers={irSystemHeaders}
+          rows={irSystemRows}
+        />
+      </div>
+      
+      <div className="mb-8">
+        <StatusTable 
+          title="IR 注入階段" 
+          headers={irInjectionHeaders}
+          rows={irInjectionRows}
         />
       </div>
     </div>
