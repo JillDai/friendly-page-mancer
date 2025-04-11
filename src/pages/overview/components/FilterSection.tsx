@@ -18,11 +18,7 @@ interface FilterConfig {
 
 interface FilterSectionProps {
   activeTab: string;
-  filterConfigs: {
-    overview: FilterConfig[];
-    requirementTraceability: FilterConfig[];
-    testCoverage: FilterConfig[];
-  };
+  filterConfigs: FilterConfig[];
   onSearch: () => void;
 }
 
@@ -31,25 +27,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   filterConfigs,
   onSearch 
 }) => {
-  // Get the appropriate filters based on the active tab
-  const getActiveFilters = () => {
-    switch (activeTab) {
-      case 'overview':
-        return filterConfigs.overview;
-      case 'requirement-traceability':
-        return filterConfigs.requirementTraceability;
-      case 'test-coverage':
-        return filterConfigs.testCoverage;
-      default:
-        return [];
-    }
-  };
-
-  const activeFilters = getActiveFilters();
-  
   // Calculate the grid columns based on the number of filters
   const getGridCols = () => {
-    const count = activeFilters.length;
+    const count = filterConfigs.length;
     if (count <= 0) return "";
     if (count === 1) return "grid-cols-1";
     if (count === 2) return "grid-cols-1 md:grid-cols-2";
@@ -65,9 +45,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         <h2 className="text-lg font-medium text-custom-dark-teal ml-2">篩選器</h2>
       </div>
       
-      {activeFilters.length > 0 ? (
+      {filterConfigs.length > 0 ? (
         <div className={`grid ${getGridCols()} gap-6 mb-6`}>
-          {activeFilters.map((filter, index) => (
+          {filterConfigs.map((filter, index) => (
             <FilterRow
               key={index}
               label={filter.label}
