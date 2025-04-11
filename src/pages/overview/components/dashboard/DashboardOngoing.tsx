@@ -1,14 +1,14 @@
 
 import React from "react";
 import FilterToolbar from "./FilterToolbar";
-import StatCard from "./StatCard";
 import DonutChart from "./DonutChart";
 import StatusTable from "./StatusTable";
+import { Card, CardContent } from "@/components/ui/card";
 
 const DashboardOngoing: React.FC = () => {
   // Mock data for charts
   const testExecutionData = [
-    { name: "Passed", value: 375, color: "#7CB57C" },
+    { name: "Pass", value: 375, color: "#7CB57C" },
     { name: "Failed", value: 130, color: "#E88080" },
   ];
 
@@ -25,50 +25,52 @@ const DashboardOngoing: React.FC = () => {
   // Mock data for tables
   const releaseStatusHeaders = ["Release", "Active", "Pass", "Failure", "Not Run", "Total"];
   const releaseStatusRows = [
-    { id: "1", columns: ["Release 01", 244, 170, 10, 64, 244] },
-    { id: "2", columns: ["Release 02", 152, 89, 12, 51, 152] },
-    { id: "3", columns: ["Release 03", 109, 52, 18, 39, 109] },
+    { id: "1", columns: ["Release 01-Sprint 01", 244, 170, 10, 64, 244] },
+    { id: "2", columns: ["Release 01-Sprint 02", 152, 89, 12, 51, 152] },
+    { id: "3", columns: ["Release 02-Sprint 01", 109, 52, 18, 39, 109] },
+    { id: "total", columns: ["Total", 505, 311, 40, 154, 505] },
   ];
 
-  const cycleStatusHeaders = ["Cycle", "執行中/待執行", "已執行/通過", "緩衝項"];
+  const cycleStatusHeaders = ["Release", "Cycle", "執行中/待執行", "已執行/通過", "執行進度", "測試範圍", "測試計劃", "計劃/總數", "進度/執行", "執行/完成", "完成/落後", "未達標與否"];
   const cycleStatusRows = [
-    { id: "1", columns: ["Release 01-Cycle 01", 345, 215, "72%"] },
-    { id: "2", columns: ["Release 01-Cycle 02", 267, 78, "89%"] },
-    { id: "3", columns: ["Release 02-Cycle 01", 7, 25, "70%"] },
+    { id: "1", columns: ["Release 01-Sprint 01", "Release 01-Cycle 01", "Y/Y/Y/MM/DD", "Y/Y/Y/MM/DD", "74%", "124%", "73.68% (14/19) SIT", "99.33% (150/151) UAT", "96.67%", "OK"] },
+    { id: "2", columns: ["Release 01-Sprint 02", "Release 01-Cycle 02", "Y/Y/Y/MM/DD", "Y/Y/Y/MM/DD", "62%", "121%", "73.68% (14/19) SIT", "82.22% (180/219) UAT", "90.25%", "OK"] },
+    { id: "3", columns: ["Release 02-Sprint 01", "Release 02-Cycle 01", "Y/Y/Y/MM/DD", "Y/Y/Y/MM/DD", "46%", "86%", "73.68% (14/19) SIT", "85.95% (585/681) UAT", "90.22%", "OK"] },
   ];
 
-  const testPlanStatusHeaders = ["Cycle", "Test Plan", "Start Date", "End Date", "Assigned To", "Plan/Total", "進度/執行", "進行中/待執行", "執行/完成", "完成/落後", "未達標與否"];
+  const testPlanStatusHeaders = ["Cycle", "Test Plan", "Start Date", "End Date", "Assigned To", "Plan/Total", "測試範圍", "計劃/總數", "執行/完成", "完成/落後", "未達標與否"];
   const testPlanStatusRows = [
-    { id: "1", columns: ["Release 01-Cycle 01", "Test Plan Title", "YYYY/MM/DD", "YYYY/MM/DD", "SA", "18", "44", "93.82%", "75%", "90.56%", "OK"] },
+    { id: "1", columns: ["Release 01-Cycle 01", "Test Plan Title", "Y/Y/Y/MM/DD", "Y/Y/Y/MM/DD", "SA", "18", "44", "99.58% (239/240)", "78% (173/221)", "<90.56%", "OK"] },
   ];
 
   const defectStatusHeaders = ["Release", "Cycle", "總計", "已修正%", "待修正%"];
   const defectStatusRows = [
-    { id: "1", columns: ["Release 01-Cycle 01", "Total", 230, 85, "15%"] },
-    { id: "2", columns: ["Release 01-Cycle 02", "Total", 167, 96, "4%"] },
+    { id: "1", columns: ["Release 01-Sprint 01", "Release 01-Cycle 01", 230, "85%", "15%"] },
+    { id: "2", columns: ["Release 01-Sprint 02", "Release 01-Cycle 02", 167, "96%", "4%"] },
+    { id: "3", columns: ["Release 02-Sprint 01", "Release 02-Cycle 01", 7, "86%", "14%"] },
   ];
 
   const defectPriorityHeaders = ["Priority", "Total", "1. Critical", "2. High", "3. Medium", "4. Low"];
   const defectPriorityRows = [
-    { id: "1", columns: ["High", 9, 3, 1, 0, 5] },
-    { id: "2", columns: ["Medium", 0, 0, 0, 0, 0] },
-    { id: "3", columns: ["Low", 0, 0, 0, 0, 0] },
-    { id: "4", columns: ["Total", 9, 3, 1, 0, 5] },
+    { id: "1", columns: ["High", 448, 193, "43.08%", 24, "5.37%", 79, "17.59%", 201, "44.87%", 62, "13.84%"] },
+    { id: "2", columns: ["Medium", 25, 12, "48%", 3, "12%", 22, "88%", 6, "22%", 8, "32%"] },
+    { id: "3", columns: ["Low", 9, 3, "33%", 1, "11%", 0, "0%", 5, "55%", 0, "0%"] },
+    { id: "4", columns: ["Total", 482, 208, "43.15%", 28, "5.81%", 101, "20.95%", 212, "43.98%", 70, "14.52%"] },
   ];
 
-  const defectTypeHeaders = ["類別", "Total", "1. Critical", "2. High", "3. Medium", "4. Low"];
+  const defectTypeHeaders = ["Category", "Total", "(1) 需求", "(2) 設計", "(3) 程式", "(4) 環境/組態/資料"];
   const defectTypeRows = [
-    { id: "1", columns: ["A", 9, 3, 1, 0, 5] },
-    { id: "2", columns: ["B", 0, 0, 0, 0, 0] },
-    { id: "3", columns: ["C", 0, 0, 0, 0, 0] },
-    { id: "4", columns: ["Total", 9, 3, 1, 0, 5] },
+    { id: "1", columns: ["1. High", 9, 2, 1, 5, 1] },
+    { id: "2", columns: ["2. Medium", 0, 0, 0, 0, 0] },
+    { id: "3", columns: ["3. Low", 0, 0, 0, 0, 0] },
+    { id: "4", columns: ["Total", 9, 2, 1, 5, 1] },
   ];
 
-  const defectEntryHeaders = ["Category", "Total", "(1) 需求", "(2) 設計", "(3) 程式", "(4) 環境/組態/資料"];
+  const defectEntryHeaders = ["Severity", "Total", "(1) 需求", "(2) 設計", "(3) 程式", "(4) 環境/組態/資料"];
   const defectEntryRows = [
-    { id: "1", columns: ["1. High", 0, 0, 0, 0, 0] },
-    { id: "2", columns: ["2. Medium", 0, 0, 0, 0, 0] },
-    { id: "3", columns: ["3. Medium low", 0, 0, 0, 0, 0] },
+    { id: "1", columns: ["1. Critical", 0, 0, 0, 0, 0] },
+    { id: "2", columns: ["2. High", 0, 0, 0, 0, 0] },
+    { id: "3", columns: ["3. Medium", 0, 0, 0, 0, 0] },
     { id: "4", columns: ["4. Low", 0, 0, 0, 0, 0] },
     { id: "5", columns: ["Total", 0, 0, 0, 0, 0] },
   ];

@@ -13,6 +13,8 @@ interface DonutChartProps {
 }
 
 const DonutChart: React.FC<DonutChartProps> = ({ data, title, centerText }) => {
+  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+  
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
       <h3 className="text-sm font-medium text-gray-600 mb-2">{title}</h3>
@@ -36,12 +38,21 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, title, centerText }) => {
               layout="horizontal"
               verticalAlign="bottom"
               align="center"
-              wrapperStyle={{ fontSize: "12px" }}
+              formatter={(value, entry, index) => {
+                const item = data[index];
+                const percentage = Math.round((item.value / total) * 100);
+                return (
+                  <span className="text-xs">
+                    {`${value} (${percentage}%)`}
+                  </span>
+                );
+              }}
             />
           </PieChart>
         </ResponsiveContainer>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
           <div className="text-2xl font-bold">{centerText}</div>
+          <div className="text-xs text-gray-500">Total</div>
         </div>
       </div>
     </div>

@@ -19,28 +19,30 @@ const StatusTable: React.FC<StatusTableProps> = ({ title, headers, rows }) => {
       <div className="bg-gray-100 p-2 border-b">
         <h3 className="text-sm font-medium text-gray-600">{title}</h3>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-gray-50">
-            {headers.map((header, index) => (
-              <TableHead key={index} className="text-xs font-medium text-gray-500">
-                {header}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.columns.map((cell, cellIndex) => (
-                <TableCell key={`${row.id}-${cellIndex}`} className="text-xs py-2">
-                  {cell}
-                </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-gray-50">
+              {headers.map((header, index) => (
+                <TableHead key={index} className="text-xs font-medium text-gray-500 whitespace-nowrap">
+                  {header}
+                </TableHead>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id} className={row.id === "total" ? "font-semibold bg-gray-50" : ""}>
+                {row.columns.map((cell, cellIndex) => (
+                  <TableCell key={`${row.id}-${cellIndex}`} className="text-xs py-2 whitespace-nowrap">
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

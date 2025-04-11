@@ -10,10 +10,10 @@ interface FilterToolbarProps {
 
 const FilterToolbar: React.FC<FilterToolbarProps> = ({ onSearch }) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-6">
+    <div className="flex flex-col sm:flex-row gap-4 mb-6 bg-white rounded-lg p-4 shadow-sm">
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Select>
-          <SelectTrigger>
+          <SelectTrigger className="bg-white border border-gray-200">
             <SelectValue placeholder="Release" />
           </SelectTrigger>
           <SelectContent>
@@ -23,7 +23,7 @@ const FilterToolbar: React.FC<FilterToolbarProps> = ({ onSearch }) => {
           </SelectContent>
         </Select>
         <Select>
-          <SelectTrigger>
+          <SelectTrigger className="bg-white border border-gray-200">
             <SelectValue placeholder="Cycle" />
           </SelectTrigger>
           <SelectContent>

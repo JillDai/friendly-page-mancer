@@ -10,7 +10,7 @@ interface TabNavigationProps {
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
   return (
     <div className="border-b border-gray-200 mb-8">
-      <Tabs value={activeTab} onValueChange={onTabChange}>
+      <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
         <TabsList className="w-full justify-start gap-6 rounded-none bg-transparent p-0">
           <TabsTrigger 
             value="overview" 

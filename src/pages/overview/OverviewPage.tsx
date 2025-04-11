@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -176,7 +177,7 @@ const OverviewPage = () => {
         />
       )}
       
-      <Tabs value={activeTab} className="mb-8">
+      <Tabs value={activeTab} className="mb-8" onValueChange={setActiveTab}>
         <TabsContent value="overview" className="mt-4 p-0">
           <Card className="border border-gray-200 shadow-sm">
             <CardContent className="p-0">
@@ -214,10 +215,14 @@ const OverviewPage = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="dashboard-complete">
-          <div className="py-8 text-center text-gray-500">
-            Dashboard Complete content goes here
-          </div>
+        <TabsContent value="dashboard-complete" className="mt-4 p-0">
+          <Card className="border border-gray-200 shadow-sm">
+            <CardContent className="p-0">
+              <div className="py-8 text-center text-gray-500">
+                Dashboard Complete content goes here
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
