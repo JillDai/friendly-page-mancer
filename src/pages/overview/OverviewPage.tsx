@@ -8,6 +8,7 @@ import FilterSection from './components/FilterSection';
 import TestPlanTable from '@/components/TestPlanTable';
 import RequirementTraceabilityTable from '@/components/RequirementTraceabilityTable';
 import TestCoverageTable from '@/components/TestCoverageTable';
+import DashboardOngoing from './components/dashboard/DashboardOngoing';
 
 const OverviewPage = () => {
   const [activeArea, setActiveArea] = useState("01");
@@ -168,11 +169,13 @@ const OverviewPage = () => {
 
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <FilterSection 
-        activeTab={activeTab} 
-        filterConfigs={filterConfigs} 
-        onSearch={handleSearch} 
-      />
+      {activeTab !== "dashboard-ongoing" && activeTab !== "dashboard-complete" && (
+        <FilterSection 
+          activeTab={activeTab} 
+          filterConfigs={filterConfigs} 
+          onSearch={handleSearch} 
+        />
+      )}
       
       <Tabs value={activeTab} className="mb-8">
         <TabsContent value="overview" className="mt-4 p-0">
@@ -205,10 +208,12 @@ const OverviewPage = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="dashboard-ongoing">
-          <div className="py-8 text-center text-gray-500">
-            Dashboard Ongoing content goes here
-          </div>
+        <TabsContent value="dashboard-ongoing" className="mt-4 p-0">
+          <Card className="border border-gray-200 shadow-sm">
+            <CardContent className="p-0">
+              <DashboardOngoing />
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="dashboard-complete">
           <div className="py-8 text-center text-gray-500">

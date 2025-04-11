@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import OverviewPage from "./OverviewPage";
+import OverviewPage from "./overview";
 
 const Index = () => {
   return <OverviewPage />;
