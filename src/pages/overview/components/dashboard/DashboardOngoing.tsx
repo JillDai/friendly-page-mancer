@@ -3,7 +3,6 @@ import React from "react";
 import FilterToolbar from "./FilterToolbar";
 import DonutChart from "./DonutChart";
 import StatusTable from "./StatusTable";
-import { Card, CardContent } from "@/components/ui/card";
 
 const DashboardOngoing: React.FC = () => {
   // Mock data for charts
@@ -80,10 +79,10 @@ const DashboardOngoing: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-custom-dark-teal mb-6">Dashboard OnGoing</h1>
-      
-      <FilterToolbar onSearch={handleSearch} />
+    <div>
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <FilterToolbar onSearch={handleSearch} />
+      </div>
       
       {/* Charts Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -107,7 +106,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Release Status Table */}
       <div className="mb-8">
         <StatusTable 
-          title="測試專案執行情況 by Release" 
+          title="測試案例結果分佈 by Release" 
           headers={releaseStatusHeaders}
           rows={releaseStatusRows}
         />
@@ -116,7 +115,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Cycle Status Table */}
       <div className="mb-8">
         <StatusTable 
-          title="測試專案執行情況 by Release/Cycle" 
+          title="測試案例執行進度 by Release/Cycle" 
           headers={cycleStatusHeaders}
           rows={cycleStatusRows}
         />
@@ -125,7 +124,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Test Plan Status Table */}
       <div className="mb-8">
         <StatusTable 
-          title="測試專案執行情況 by Test Plan" 
+          title="測試案例執行進度 by Test Plan" 
           headers={testPlanStatusHeaders}
           rows={testPlanStatusRows}
         />
@@ -134,7 +133,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Defect Status Table */}
       <div className="mb-8">
         <StatusTable 
-          title="缺陷總數統計" 
+          title="正在測試階段 by Cycle" 
           headers={defectStatusHeaders}
           rows={defectStatusRows}
         />
@@ -143,7 +142,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Defect Priority Table */}
       <div className="mb-8">
         <StatusTable 
-          title="缺陷分類/程度" 
+          title="缺陷總數統計" 
           headers={defectPriorityHeaders}
           rows={defectPriorityRows}
         />
@@ -152,7 +151,7 @@ const DashboardOngoing: React.FC = () => {
       {/* Defect Type Table */}
       <div className="mb-8">
         <StatusTable 
-          title="缺陷分類/系統" 
+          title="缺陷分析 by 種類" 
           headers={defectTypeHeaders}
           rows={defectTypeRows}
         />
@@ -161,7 +160,16 @@ const DashboardOngoing: React.FC = () => {
       {/* Defect Entry Table */}
       <div className="mb-8">
         <StatusTable 
-          title="缺陷導入階段" 
+          title="缺陷分析 by 系統" 
+          headers={defectEntryHeaders}
+          rows={defectEntryRows}
+        />
+      </div>
+      
+      {/* Extra Table */}
+      <div className="mb-8">
+        <StatusTable 
+          title="缺陷進入階段" 
           headers={defectEntryHeaders}
           rows={defectEntryRows}
         />

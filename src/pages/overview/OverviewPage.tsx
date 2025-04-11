@@ -19,10 +19,22 @@ const OverviewPageContent: React.FC = () => {
   const { handleSearch } = useFilterContext();
   const filterConfigs = useFilterConfig(activeTab);
   
+  // Determine page title based on active tab
+  const getPageTitle = () => {
+    switch(activeTab) {
+      case "dashboard-ongoing":
+        return "Dashboard Ongoing";
+      case "dashboard-complete":
+        return "Dashboard Complete";
+      default:
+        return "Overview";
+    }
+  };
+  
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-custom-dark-teal">Overview</h1>
+        <h1 className="text-3xl font-bold text-custom-dark-teal">{getPageTitle()}</h1>
         <AreaSelector activeArea={activeArea} onAreaChange={setActiveArea} />
       </div>
 
